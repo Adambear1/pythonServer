@@ -2,8 +2,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import html_render
 import api_routes
 
-taskList = ['Task 1', 'Task 2', 'Task 3']
-
 
 def main():
     PORT = 8000

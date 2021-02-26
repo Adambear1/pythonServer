@@ -1,6 +1,8 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import http.server
 import cgi
 import format_data as routes
+import html_outline as html
 
 
 class requestHandler(BaseHTTPRequestHandler):
@@ -10,17 +12,9 @@ class requestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("content-type", "text/html")
             self.end_headers()
-            output = ''
-            output += '<html><body>'
-            output += '<h1>Task List</h1>'
-            output += '<h3><a href="/tasklist/new">Add New Task</a></h3>'
-            for task in taskList:
-                output += task
-                output += '<a href="/tasklist/%s/remove">Delete</a>' % task
-                output += '<a href="/tasklist/%s/update">Update</a>' % task
-                output += "</br>"
-            output += "</body></html>"
-            self.wfile.write(output.encode())
+            html.renderFile().homepage
+            print(html.renderFile().return_page)
+            return self.wfile.write(bytes(html.renderFile().return_page))
         if self.path.endswith("/new"):
             self.send_response(200)
             self.send_header("content-type", "text/html")
@@ -33,7 +27,7 @@ class requestHandler(BaseHTTPRequestHandler):
             output += '<input type="submit" value="Add">'
             output += '</form>'
             output += '</body></html>'
-            self.wfile.write(output.encode())
+            self.wfile.write(bytes(output, "utf8"))
 
         if self.path.endswith("/remove"):
             listIDPath = self.path.split("/")[2]
@@ -49,6 +43,7 @@ class requestHandler(BaseHTTPRequestHandler):
             output += "</form>"
             output += '<a href="/tasklist">Cancel</a>'
             output += "</body></html>"
+
             self.wfile.write(output.encode())
 
         if self.path.endswith("/update"):
