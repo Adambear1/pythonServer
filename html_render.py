@@ -1,4 +1,5 @@
 from io import StringIO
+import os
 #!/usr/bin/env python3
 
 """
@@ -165,6 +166,10 @@ class Meta(SelfClosingTag):
     indlvl = 2
 
 
+class BootstrapLink(SelfClosingTag):
+    tag = 'link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"'
+
+
 class A(Element):
     tag = 'a href'
     indlvl = 4
@@ -180,6 +185,92 @@ class A(Element):
         self.content.insert(0, '\n')
         self.content.insert(1, '<' + self.tag + '="' +
                             self.link + '">' + self.web + '</a>')
+        self.content.insert(len(self.content), '\n')
+        for contentlet in self.content:
+            try:
+                contentlet.render(out_file)
+            except AttributeError:
+                if contentlet == '\n':
+                    out_file.write(contentlet)
+                elif contentlet[0] == '<':
+                    out_file.write(self.cur_ind + contentlet)
+                else:
+                    out_file.write(self.cur_ind + self.indent + contentlet)
+
+
+class Form(Element):
+    tag = 'form enctype="multipart/form-data" method="POST" action'
+    indlvl = 4
+
+    def __init__(self, link, content=None):
+        self.content = []
+        self.link = link
+        if content is not None:
+            self.web = content
+
+    def render(self, out_file, cur_ind=''):
+        self.cur_ind = cur_ind + (self.indent*self.indlvl)
+        self.content.insert(0, '\n')
+        self.content.insert(1, '<' + self.tag + '="' +
+                            self.link + '">')
+        self.content.insert(len(self.content), '\n')
+        for contentlet in self.content:
+            try:
+                contentlet.render(out_file)
+            except AttributeError:
+                if contentlet == '\n':
+                    out_file.write(contentlet)
+                elif contentlet[0] == '<':
+                    out_file.write(self.cur_ind + contentlet)
+                else:
+                    out_file.write(self.cur_ind + self.indent + contentlet)
+
+
+class Input(Element):
+    tag = 'input type="text" name'
+    indlvl = 4
+
+    def __init__(self, link, attribute="", content=None):
+        self.content = []
+        self.link = link
+        self.attribute = attribute
+        if content is not None:
+            self.web = content
+
+    def render(self, out_file, cur_ind=''):
+        self.cur_ind = cur_ind + (self.indent*self.indlvl)
+        self.content.insert(0, '\n')
+        self.content.insert(1, '<' + self.tag + '="' +
+                            self.link + '" id="' + self.attribute + '" value="' + self.attribute.replace("-", " ") + '">')
+        self.content.insert(len(self.content), '\n')
+        for contentlet in self.content:
+            try:
+                contentlet.render(out_file)
+            except AttributeError:
+                if contentlet == '\n':
+                    out_file.write(contentlet)
+                elif contentlet[0] == '<':
+                    out_file.write(self.cur_ind + contentlet)
+                else:
+                    out_file.write(self.cur_ind + self.indent + contentlet)
+
+
+class Submit(Element):
+    tag = 'input type="submit" value'
+    indlvl = 4
+
+    def __init__(self, link, attribute="", content=None):
+        self.content = []
+        self.link = link
+        self.attribute = attribute
+        if content is not None:
+            self.web = content
+
+    def render(self, out_file, cur_ind=''):
+        self.cur_ind = cur_ind + (self.indent*self.indlvl)
+        self.content.insert(0, '\n')
+        self.content.insert(1, '<' + self.tag + '="' +
+                            self.link + '">')
         self.content.insert(len(self.content), '\n')
         for contentlet in self.content:
             try:

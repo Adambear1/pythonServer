@@ -12,57 +12,29 @@ class requestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("content-type", "text/html")
             self.end_headers()
-            html.renderFile().homepage
-            print(html.renderFile().return_page)
-            return self.wfile.write(bytes(html.renderFile().return_page))
+            html.renderFile().homepage()
+            return self.wfile.write(bytes(html.renderFile().return_page(), "utf8"))
         if self.path.endswith("/new"):
             self.send_response(200)
             self.send_header("content-type", "text/html")
             self.end_headers()
-            output = ''
-            output += '<html><body>'
-            output += '<h1>Add New Task</h1>'
-            output += '<form method="POST" enctype="multipart/form-data" action="/tasklist/new">'
-            output += '<input name="task" type="text" placeholder="Add New Task">'
-            output += '<input type="submit" value="Add">'
-            output += '</form>'
-            output += '</body></html>'
-            self.wfile.write(bytes(output, "utf8"))
+            html.renderFile().newTask()
+            return self.wfile.write(bytes(html.renderFile().return_page(), "utf8"))
 
         if self.path.endswith("/remove"):
-            listIDPath = self.path.split("/")[2]
             self.send_response(200)
             self.send_header("content-type", "text/html")
             self.end_headers()
-            output = ""
-            output += "<html><body>"
-            output += "<h1>Remove Task: %s</h1>" % listIDPath.replace(
-                "%20", " ")
-            output += "<form method='POST' enctype='multipart/form-data' action='/tasklist/%s/remove'>" % listIDPath
-            output += "<input type='submit' value='Remove'>"
-            output += "</form>"
-            output += '<a href="/tasklist">Cancel</a>'
-            output += "</body></html>"
-
-            self.wfile.write(output.encode())
+            html.renderFile().removeTask(self.path.split("/")[2])
+            return self.wfile.write(bytes(html.renderFile().return_page(), "utf8"))
 
         if self.path.endswith("/update"):
             listIDPath = self.path.split("/")[2]
             self.send_response(200)
             self.send_header("content-type", "text/html")
             self.end_headers()
-            output = ""
-            output += "<html><body>"
-            output += "<h1>Update Task: %s</h1>" % listIDPath.replace(
-                "%20", " ")
-            output += "<form method='POST' enctype='multipart/form-data' action='/tasklist/%s/update'>" % listIDPath
-            output += '<input name="update" type="text" value="%s">' % listIDPath.replace(
-                "%20", " ")
-            output += "<input type='submit' value='Update'>"
-            output += "</form>"
-            output += '<a href="/tasklist">Cancel</a>'
-            output += "</body></html>"
-            self.wfile.write(output.encode())
+            html.renderFile().updateTask(self.path.split("/")[2])
+            return self.wfile.write(bytes(html.renderFile().return_page(), "utf8"))
 
     def do_POST(self):
         if self.path.endswith("/new"):
@@ -100,6 +72,9 @@ class requestHandler(BaseHTTPRequestHandler):
             pdict['CONTENT-LENGTH'] = content_len
             if ctype == "multipart/form-data":
                 fields = cgi.parse_multipart(self.rfile, pdict)
+                print(listIDPath.replace(
+                    "%20", " "))
+                print(fields.get('update')[0])
                 routes.GatherData()._update(listIDPath.replace(
                     "%20", " "), fields.get('update')[0])
 

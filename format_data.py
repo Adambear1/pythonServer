@@ -28,11 +28,12 @@ class GatherData():
             return self.data
 
     def _remove(self, item):
-        self.data.remove(item)
+        self.data.remove(item.replace("-", " "))
         self.updateFile
         return self.data
 
     def _update(self, item, value):
-        self.data[self.data.index(item)] = value
+        self.data[self.data.index(item.replace("-", " "))
+                  ] = value
         self.updateFile
         return self.data
