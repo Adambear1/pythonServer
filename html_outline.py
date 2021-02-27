@@ -17,7 +17,6 @@ class renderFile():
         header = render.Head()
         header.append(render.Meta(charset="UTF-8"))
         header.append(render.BootstrapLink())
-
         header.append(render.Title("Task List"))
         output.append(header)
         body = render.Body()
@@ -49,7 +48,6 @@ class renderFile():
         body.append(render.Form("/tasklist/new"))
         body.append(render.Input("task"))
         body.append(render.Br())
-        body.append(render.P("Add New Task"))
         body.append(render.Br())
         body.append(render.Submit("Add Task"))
         output.append(body)

@@ -82,7 +82,7 @@ class Body(Element):
 
 class P(Element):
     tag = 'p'
-    indlvl = 2
+    indlvl = 3
 
 
 class Head(Element):
@@ -91,7 +91,7 @@ class Head(Element):
 
 
 class OneLineTag(Element):
-    indlvl = 2
+    indlvl = 3
 
     def __init__(self, content=None, **kwargs):
         self.content = []
@@ -153,12 +153,12 @@ class SelfClosingTag(Element):
 
 class Hr(SelfClosingTag):
     tag = 'hr'
-    indlvl = 2
+    indlvl = 3
 
 
 class Br(SelfClosingTag):
     tag = 'br'
-    indlvl = 2
+    indlvl = 3
 
 
 class Meta(SelfClosingTag):
@@ -171,7 +171,7 @@ class BootstrapLink(SelfClosingTag):
 
 
 class A(Element):
-    tag = 'a href'
+    tag = 'a class="btn btn-primary" href'
     indlvl = 4
 
     def __init__(self, link, content=None):
@@ -199,8 +199,8 @@ class A(Element):
 
 
 class Form(Element):
-    tag = 'form enctype="multipart/form-data" method="POST" action'
-    indlvl = 4
+    tag = 'form enctype="multipart/form-data" class="form-group" method="POST" action'
+    indlvl = 3
 
     def __init__(self, link, content=None):
         self.content = []
@@ -227,7 +227,7 @@ class Form(Element):
 
 
 class Input(Element):
-    tag = 'input type="text" name'
+    tag = 'input type="text" class="input-group"  name'
     indlvl = 4
 
     def __init__(self, link, attribute="", content=None):
@@ -256,7 +256,7 @@ class Input(Element):
 
 
 class Submit(Element):
-    tag = 'input type="submit" value'
+    tag = 'input type="submit" class="btn btn-secondary" value'
     indlvl = 4
 
     def __init__(self, link, attribute="", content=None):
@@ -284,13 +284,18 @@ class Submit(Element):
                     out_file.write(self.cur_ind + self.indent + contentlet)
 
 
+class Div(Element):
+    tag = 'div class="container" '
+    indlvl = 2
+
+
 class Ul(Element):
-    tag = 'ul'
+    tag = 'ul class="list-group" '
     indlvl = 2
 
 
 class Li(Element):
-    tag = 'li'
+    tag = 'li class="list-group-item" '
     indlvl = 3
 
 
